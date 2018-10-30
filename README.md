@@ -1,4 +1,4 @@
-This application presents solution to recruiting task called:
+This application presents solution to recruiting task:
 
 # Space Agency Data Hub
 
