@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -26,6 +27,7 @@ import java.time.Instant;
 @Data
 @ToString(exclude = "mission")
 @NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class Product implements Serializable {
 
@@ -34,7 +36,7 @@ public class Product implements Serializable {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_name", nullable = false)
     private Mission mission;
 
@@ -55,5 +57,7 @@ public class Product implements Serializable {
     @NonNull
     private String url;
 
+    //when mission is removed isActive flag is set to false (not physically removed from DB)
+    private boolean isActive = true;
 
 }

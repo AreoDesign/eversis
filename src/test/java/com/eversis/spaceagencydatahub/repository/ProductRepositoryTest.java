@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Set;
 
 @SpringBootTest
@@ -49,13 +48,6 @@ public class ProductRepositoryTest {
         //refresh Entity from DB
         mission = missionRepository.findById(mission.getName()).get();
 
-        List<Product> missionProducts = mission.getProducts();
-
-        log.info("mission.getProducts(): {}", missionProducts.toString());
-
-        Assert.assertNotNull(mission.getProducts());
-        Assert.assertEquals(1, mission.getProducts().size());
-
         Assert.assertEquals(mission, product.getMission());
     }
 
@@ -67,10 +59,8 @@ public class ProductRepositoryTest {
                 .startDate(Instant.now())
                 .endDate(Instant.now().plus(365, ChronoUnit.DAYS))
                 .build();
-
         //save in db
         mission = missionRepository.saveAndFlush(mission);
-
         //add to missions container
         missions.add(mission);
 
@@ -86,10 +76,8 @@ public class ProductRepositoryTest {
         product.setFootprintAltitude(1000d);
         product.setFootprintFourthAngle(1.5d);
         product.setMission(mission);
-
         //save in db
         product = productRepository.saveAndFlush(product);
-
         //add to products container
         products.add(product);
 
