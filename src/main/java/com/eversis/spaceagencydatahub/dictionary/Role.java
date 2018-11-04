@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum Role {
-    CUSTOMER("customer", "customer_password"),
-    MANAGER("content_manager", "manager_password");
+    CUSTOMER("customer", "customer"),
+    CONTENT_MANAGER("manager", "manager");
 
     private String roleName;
     private String password;

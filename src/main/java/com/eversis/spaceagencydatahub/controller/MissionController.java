@@ -3,11 +3,14 @@ package com.eversis.spaceagencydatahub.controller;
 import com.eversis.spaceagencydatahub.dto.MissionDTO;
 import com.eversis.spaceagencydatahub.service.MissionService;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class MissionController {
@@ -16,6 +19,16 @@ public class MissionController {
 
     public MissionController(MissionService missionService) {
         this.missionService = missionService;
+    }
+
+    @GetMapping("/missions")
+    public List<MissionDTO> getMissions(){
+        return missionService.getAllMissions();
+    }
+
+    @GetMapping("/missions/{missionName}")
+    public MissionDTO getMission(@PathVariable String missionName){
+        return missionService.getMissionByName(missionName);
     }
 
     @PostMapping("/missions")

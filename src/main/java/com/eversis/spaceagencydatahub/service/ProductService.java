@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This service adds and removes missions - implementation for Process Content Administrator PRODUCTS management
@@ -42,14 +44,7 @@ public class ProductService {
     }
 
     public ProductDTO remove(Long productId) {
-        Validate.notNull(productId, "Existing product id cannot be null!");
-        Validate.validState(productId > 0, String.format("Product id must be positive, while given id: '%d'", productId));
-        Product productEntity = productRepository.findById(productId)
-                                                 .orElseThrow(() -> {
-                                                     String errMsg = String.format("Product with id: %d not found.", productId);
-                                                     log.error(errMsg);
-                                                     return new EntityNotFoundException(errMsg);
-                                                 });
+        Product productEntity = validateInputAndGetProductById(productId);
         productEntity.setActive(false);
         productEntity.setDeactivationDate(Instant.now());
         Product product = productRepository.save(productEntity);
@@ -57,4 +52,24 @@ public class ProductService {
         return productAssembler.convert(product);
     }
 
+    public List<ProductDTO> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+        return products.stream().map(product -> productAssembler.convert(product)).collect(Collectors.toList());
+    }
+
+    public ProductDTO getProductById(Long productId) {
+        Product productEntity = validateInputAndGetProductById(productId);
+        return productAssembler.convert(productEntity);
+    }
+
+    private Product validateInputAndGetProductById(Long productId) {
+        Validate.notNull(productId, "Existing product id cannot be null!");
+        Validate.validState(productId > 0, String.format("Product id must be positive, while given id: '%d'", productId));
+        return productRepository.findById(productId)
+                                .orElseThrow(() -> {
+                                    String errMsg = String.format("Product with id: %d not found.", productId);
+                                    log.error(errMsg);
+                                    return new EntityNotFoundException(errMsg);
+                                });
+    }
 }

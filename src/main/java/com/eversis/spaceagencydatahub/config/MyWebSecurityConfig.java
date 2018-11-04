@@ -29,16 +29,23 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
             .withUser(Role.CUSTOMER.getRoleName()).password(encoder.encode(Role.CUSTOMER.getPassword())).roles(Role.CUSTOMER.getRoleName())    //TODO: move to enum type
             .and()
-            .withUser(Role.MANAGER.getRoleName()).password(encoder.encode(Role.MANAGER.getPassword())).roles(Role.MANAGER.getRoleName());
+            .withUser(Role.CONTENT_MANAGER.getRoleName()).password(encoder.encode(Role.CONTENT_MANAGER.getPassword())).roles(Role.CONTENT_MANAGER.getRoleName());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .authorizeRequests()
-            .antMatchers("/readme").permitAll()     //TODO: add controller for readme
-            .regexMatchers(HttpMethod.POST, "/missions").hasRole(Role.MANAGER.getRoleName())
-            //TODO: add regexes for all controller methods
+            .antMatchers("/readme").permitAll()
+            .antMatchers(HttpMethod.GET, "/missions").permitAll()
+            .antMatchers(HttpMethod.GET, "/missions/*").permitAll()
+            .antMatchers(HttpMethod.GET, "/products").permitAll()
+            .antMatchers(HttpMethod.GET, "/products/*").permitAll()
+            .regexMatchers(HttpMethod.POST, "/missions").hasRole(Role.CONTENT_MANAGER.getRoleName())
+            .regexMatchers(HttpMethod.PUT, "/missions").hasRole(Role.CONTENT_MANAGER.getRoleName())
+            .regexMatchers(HttpMethod.DELETE, "/missions/*").hasRole(Role.CONTENT_MANAGER.getRoleName())
+            .regexMatchers(HttpMethod.POST, "/products").hasRole(Role.CONTENT_MANAGER.getRoleName())
+            .regexMatchers(HttpMethod.DELETE, "/products/*").hasRole(Role.CONTENT_MANAGER.getRoleName())
             .and()
             .httpBasic()
             .authenticationEntryPoint(getMyBasicAuthenticationEntryPoint())

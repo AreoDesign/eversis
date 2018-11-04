@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This service adds, edits and removes Missions - implementation for Process Content Administrator MISSIONS management
@@ -54,6 +56,19 @@ public class MissionService {
         return missionAssembler.convert(missionEntity);
     }
 
+    public List<MissionDTO> getAllMissions() {
+        List<Mission> missions = missionRepository.findAll();
+        return missions.stream().map(mission -> missionAssembler.convert(mission)).collect(Collectors.toList());
+    }
+
+    public MissionDTO getMissionByName(String name) {
+        Mission missionEntity = getMissionEntityByName(name);
+        return missionAssembler.convert(missionEntity);
+    }
+
+    //***************************************************************
+    //******************* PRIVATE METHODS SECTION *******************
+    //***************************************************************
     private Mission getMissionEntityByName(String missionName) {
         return missionRepository.findById(missionName)
                                 .orElseThrow(() -> {
