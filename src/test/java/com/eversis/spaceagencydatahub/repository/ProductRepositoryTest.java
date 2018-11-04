@@ -39,7 +39,7 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void readWriteTest() {
+    public void readWriteDeleteTest() {
         Mission mission = createMission();
         Product product = createProduct(mission);
 
@@ -49,6 +49,10 @@ public class ProductRepositoryTest {
         mission = missionRepository.findById(mission.getName()).get();
 
         Assert.assertEquals(mission, product.getMission());
+
+        removeMission(mission);
+
+        Assert.assertEquals(false, missionRepository.findById(mission.getName()).get().isActive());
     }
 
     private Mission createMission() {
@@ -67,6 +71,16 @@ public class ProductRepositoryTest {
         return mission;
     }
 
+    private void removeMission(Mission mission){
+        final long recordCnt = missionRepository.count();
+        Mission missionInner = missionRepository.findById(mission.getName()).get();
+        Assert.assertEquals(mission.getName(), missionInner.getName());
+        missionInner.setActive(false);
+        missionRepository.save(missionInner);
+        //verification if existing entity was modified and no new record was created by Hibernate on db
+        Assert.assertEquals(recordCnt, missionRepository.count());
+    }
+
     private Product createProduct(Mission mission) {
         //set up products
         Product product = new Product(BigDecimal.valueOf(100L), "http://space-agency-data-hub.com/images/1");
@@ -74,7 +88,7 @@ public class ProductRepositoryTest {
         product.setFootprintLatitude(30.3d);
         product.setFootprintLongitude(10.9d);
         product.setFootprintAltitude(1000d);
-        product.setFootprintFourthAngle(1.5d);
+        product.setFootprintFourthCoordinate(1.5d);
         product.setMission(mission);
         //save in db
         product = productRepository.saveAndFlush(product);

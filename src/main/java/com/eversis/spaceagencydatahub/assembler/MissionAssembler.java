@@ -8,6 +8,7 @@ import java.util.Objects;
 
 @Component
 public class MissionAssembler {
+
     public Mission convert(MissionDTO missionDTO) {
         Mission mission = null;
         if (Objects.nonNull(missionDTO)) {
@@ -16,6 +17,7 @@ public class MissionAssembler {
                              .startDate(missionDTO.getStartDate())
                              .endDate(missionDTO.getEndDate())
                              .isActive(missionDTO.isActive())
+                             .deactivationDate(missionDTO.getDeactivationDate())
                              .build();
         }
 
@@ -31,6 +33,7 @@ public class MissionAssembler {
                                    .startDate(mission.getStartDate())
                                    .endDate(mission.getEndDate())
                                    .isActive(mission.isActive())
+                                   .deactivationDate(mission.getDeactivationDate())
                                    .build();
         }
 

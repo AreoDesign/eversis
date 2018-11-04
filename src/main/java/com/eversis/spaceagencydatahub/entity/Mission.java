@@ -43,6 +43,10 @@ public class Mission implements Serializable {
     @Builder.Default
     private boolean isActive = true;
 
+    //when mission is removed isActive flag is set to false and deactivation time is set. Null == still active.
+    @Builder.Default
+    private Instant deactivationDate = null;
+
     public static MissionBuilder builder(@NotNull String name) {
         return hiddenBuilder().name(name);
     }

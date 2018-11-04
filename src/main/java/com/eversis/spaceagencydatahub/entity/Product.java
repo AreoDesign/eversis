@@ -1,13 +1,10 @@
 package com.eversis.spaceagencydatahub.entity;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,7 +22,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "product")
 @Data
-@ToString(exclude = "mission")
+//@ToString(exclude = "mission") //TODO: relation modified from BiDirectional to UniDirectional, consider this line for removal...
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -33,7 +30,7 @@ public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
+//    @Setter(AccessLevel.NONE) //TODO; consider if remove SETTER for id (needed for Assembler.convert) -> redundancy with @PathVariable?
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -47,7 +44,7 @@ public class Product implements Serializable {
     private Double footprintLatitude;
     private Double footprintLongitude;
     private Double footprintAltitude;
-    private Double footprintFourthAngle;
+    private Double footprintFourthCoordinate;
 
     @NotNull
     @NonNull
@@ -59,5 +56,8 @@ public class Product implements Serializable {
 
     //when mission is removed isActive flag is set to false (not physically removed from DB)
     private boolean isActive = true;
+
+    //when mission is removed isActive flag is set to false and deactivation time is set. Null == still active.
+    private Instant deactivationDate = null;
 
 }

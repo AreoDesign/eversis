@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.time.Instant;
 
 /**
- * This service adds, edits and removes Missions
+ * This service adds, edits and removes Missions - implementation for Process Content Administrator MISSIONS management
  */
 @Service
 @Slf4j
@@ -40,6 +41,7 @@ public class MissionService {
         Mission missionEntity = getMissionEntityByName(missionName);
         //record deactivation instead of remove
         missionEntity.setActive(false);
+        missionEntity.setDeactivationDate(Instant.now());
         missionRepository.save(missionEntity);
         return missionAssembler.convert(missionEntity);
     }

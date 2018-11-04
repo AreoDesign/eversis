@@ -23,7 +23,7 @@ public class MissionRepositoryTest {
     private final MissionRepository missionRepository = null;
 
     @Test
-    public void fullWriteReadTest() throws InterruptedException {
+    public void fullWriteReadDeleteTest() throws InterruptedException {
         final int dbMissionCnt = missionRepository.findAll().size();
 
         //set up entity
@@ -77,4 +77,5 @@ public class MissionRepositoryTest {
 
         Assert.assertEquals(created, startDatePolishTime);
     }
+
 }
