@@ -36,9 +36,10 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .authorizeRequests()
-            .antMatchers("/readme").permitAll()
-            .antMatchers(HttpMethod.GET, "/missions").permitAll()
+            .antMatchers("/h2/*").permitAll() //TODO: !!!!!!!!!!!!!
+            .antMatchers("/readme").permitAll()//TODO: !!!!!!!!!!!!!
             .antMatchers(HttpMethod.GET, "/missions/*").permitAll()
+            .antMatchers(HttpMethod.GET, "/missions").permitAll()
             .antMatchers(HttpMethod.GET, "/products").permitAll()
             .antMatchers(HttpMethod.GET, "/products/*").permitAll()
             .regexMatchers(HttpMethod.POST, "/missions").hasRole(Role.CONTENT_MANAGER.getRoleName())
@@ -46,6 +47,7 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
             .regexMatchers(HttpMethod.DELETE, "/missions/*").hasRole(Role.CONTENT_MANAGER.getRoleName())
             .regexMatchers(HttpMethod.POST, "/products").hasRole(Role.CONTENT_MANAGER.getRoleName())
             .regexMatchers(HttpMethod.DELETE, "/products/*").hasRole(Role.CONTENT_MANAGER.getRoleName())
+            .regexMatchers(HttpMethod.POST, "/orders").hasRole(Role.CUSTOMER.getRoleName())
             .and()
             .httpBasic()
             .authenticationEntryPoint(getMyBasicAuthenticationEntryPoint())

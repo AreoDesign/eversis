@@ -66,10 +66,7 @@ public class MissionService {
         return missionAssembler.convert(missionEntity);
     }
 
-    //***************************************************************
-    //******************* PRIVATE METHODS SECTION *******************
-    //***************************************************************
-    private Mission getMissionEntityByName(String missionName) {
+    public Mission getMissionEntityByName(String missionName) {
         return missionRepository.findById(missionName)
                                 .orElseThrow(() -> {
                                     String errMsg = String.format("Mission name: %s not found.", missionName);
@@ -78,6 +75,9 @@ public class MissionService {
                                 });
     }
 
+    //***************************************************************
+    //******************* PRIVATE METHODS SECTION *******************
+    //***************************************************************
     private void throwExceptionWhenMissionExists(MissionDTO missionDTO) {
         boolean missionExistOnDb = missionRepository.findById(missionDTO.getName()).isPresent();
 

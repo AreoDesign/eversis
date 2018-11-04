@@ -33,7 +33,7 @@ public class Product implements Serializable {
 //    @Setter(AccessLevel.NONE) //TODO; consider if remove SETTER for id (needed for Assembler.convert) -> redundancy with @PathVariable?
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)//todo: switch back to lazy
     @JoinColumn(name = "mission_name", nullable = false)
     private Mission mission;
 

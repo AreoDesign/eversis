@@ -2,6 +2,7 @@ package com.eversis.spaceagencydatahub.service;
 
 import com.eversis.spaceagencydatahub.assembler.ProductAssembler;
 import com.eversis.spaceagencydatahub.dto.ProductDTO;
+import com.eversis.spaceagencydatahub.entity.Mission;
 import com.eversis.spaceagencydatahub.entity.Product;
 import com.eversis.spaceagencydatahub.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -22,22 +23,26 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private ProductRepository productRepository;
-
     private ProductAssembler productAssembler;
+    private MissionService missionService;
 
-    public ProductService(ProductRepository productRepository, ProductAssembler productAssembler) {
+    public ProductService(ProductRepository productRepository, ProductAssembler productAssembler, MissionService missionService) {
         this.productRepository = productRepository;
         this.productAssembler = productAssembler;
+        this.missionService = missionService;
     }
 
     public ProductDTO add(ProductDTO productDTO) {
         Validate.notNull(productDTO, "New product cannot be null!");
-        if (productRepository.findById(productDTO.getId()).isPresent()) {
+
+        if (productDTO.getId() != null && productRepository.findById(productDTO.getId()).isPresent()) {
             String errMsg = String.format("Product id: '%d', exists already.", productDTO.getId());
             log.error(errMsg);
             throw new EntityExistsException(errMsg);
         }
+        Mission mission = missionService.getMissionEntityByName(productDTO.getMission().getName());
         Product productEntity = productAssembler.convert(productDTO);
+        productEntity.setMission(mission);
         Product product = productRepository.save(productEntity);
 
         return productAssembler.convert(product);

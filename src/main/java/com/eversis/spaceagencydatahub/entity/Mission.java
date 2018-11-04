@@ -2,13 +2,12 @@ package com.eversis.spaceagencydatahub.entity;
 
 import com.eversis.spaceagencydatahub.converter.ImageTypeConverter;
 import com.eversis.spaceagencydatahub.dictionary.ImageType;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -23,11 +22,11 @@ import java.time.Instant;
 @Data
 @Builder(builderMethodName = "hiddenBuilder")
 @NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class Mission implements Serializable {
 
     @Id
-    @Setter(AccessLevel.PUBLIC)
     @NotNull
     @NonNull
     private String name;
