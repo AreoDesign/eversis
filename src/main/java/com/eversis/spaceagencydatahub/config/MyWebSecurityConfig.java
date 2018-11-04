@@ -1,5 +1,6 @@
 package com.eversis.spaceagencydatahub.config;
 
+import com.eversis.spaceagencydatahub.dictionary.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String MANAGER = "MANAGER";
-    private static final String CUSTOMER = "CUSTOMER";
     private static final PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
     @Bean
@@ -28,9 +27,9 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-            .withUser("customer").password(encoder.encode("customer")).roles(CUSTOMER)    //TODO: move to enum type
+            .withUser(Role.CUSTOMER.getRoleName()).password(encoder.encode(Role.CUSTOMER.getPassword())).roles(Role.CUSTOMER.getRoleName())    //TODO: move to enum type
             .and()
-            .withUser("manager").password(encoder.encode("manager")).roles(MANAGER);
+            .withUser(Role.MANAGER.getRoleName()).password(encoder.encode(Role.MANAGER.getPassword())).roles(Role.MANAGER.getRoleName());
     }
 
     @Override
@@ -38,7 +37,7 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
             .authorizeRequests()
             .antMatchers("/readme").permitAll()     //TODO: add controller for readme
-            .regexMatchers(HttpMethod.POST, "/missions").hasRole(MANAGER)
+            .regexMatchers(HttpMethod.POST, "/missions").hasRole(Role.MANAGER.getRoleName())
             //TODO: add regexes for all controller methods
             .and()
             .httpBasic()
