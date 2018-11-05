@@ -1,9 +1,7 @@
 package com.eversis.spaceagencydatahub.config;
 
 import com.eversis.spaceagencydatahub.dictionary.Role;
-import org.h2.server.web.WebServlet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,13 +24,6 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new MyBasicAuthenticationEntryPoint();
     }
 
-    @Bean
-    ServletRegistrationBean h2servletRegistration() {
-        ServletRegistrationBean registrationBean = new ServletRegistrationBean(new WebServlet());
-        registrationBean.addUrlMappings("/h2/*");
-        return registrationBean;
-    }
-
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
@@ -44,7 +35,7 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-            .antMatchers("/h2/**").permitAll() //TODO: !!!!!!!!!!!!!
+            .antMatchers("/h2/**").permitAll()
             .antMatchers(HttpMethod.GET, "/missions/*").permitAll()
             .antMatchers(HttpMethod.GET, "/missions").permitAll()
             .antMatchers(HttpMethod.GET, "/products").permitAll()

@@ -25,9 +25,9 @@ public class ProductController {
 
     @GetMapping("/products")
     public List<ProductDTO> getProducts(){
+        // TODO: 2018-11-05 Extraxt to AuthComponent
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean isManager = auth.getAuthorities().contains(Role.CONTENT_MANAGER);
-
         return isManager ? productService.getAllProducts() : productService.getAllProducts(auth);
     }
 

@@ -1,6 +1,7 @@
 package com.eversis.spaceagencydatahub.service;
 
 import com.eversis.spaceagencydatahub.assembler.ProductAssembler;
+import com.eversis.spaceagencydatahub.dto.OrderDTO;
 import com.eversis.spaceagencydatahub.dto.ProductDTO;
 import com.eversis.spaceagencydatahub.entity.Mission;
 import com.eversis.spaceagencydatahub.entity.Product;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.Tuple;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,11 +27,14 @@ public class ProductService {
     private ProductRepository productRepository;
     private ProductAssembler productAssembler;
     private MissionService missionService;
+    private OrderService orderService;
 
-    public ProductService(ProductRepository productRepository, ProductAssembler productAssembler, MissionService missionService) {
+    public ProductService(ProductRepository productRepository, ProductAssembler productAssembler,
+                          MissionService missionService, OrderService orderService) {
         this.productRepository = productRepository;
         this.productAssembler = productAssembler;
         this.missionService = missionService;
+        this.orderService = orderService;
     }
 
     public ProductDTO add(ProductDTO productDTO) {
@@ -60,11 +63,20 @@ public class ProductService {
     }
 
     public List<ProductDTO> getAllProducts(Authentication auth) {
-        //here invoke query which returns kind of join to match urls with bought products
-        List<Tuple> results = productRepository.findAllProductsForCustomerName(auth.getName());
-        // TODO: 2018-11-05 remove below line logging the info
-        results.stream().forEach(result -> result.getElements().stream().forEach(element -> log.info("content: {}", element)));
-        return null;
+        List<Long> orderedProducts = orderService.findOrdersForUser(auth.getName())
+                                                 .stream()
+                                                 .map(OrderDTO::getProductId)
+                                                 .collect(Collectors.toList());
+
+        return productRepository.findAll()
+                                .stream()
+                                .map(productAssembler::convert)
+                                .peek(product -> {
+                                    if (!orderedProducts.contains(product.getId())) {
+                                        product.setUrl(null);
+                                    }
+                                })
+                                .collect(Collectors.toList());
     }
 
     public List<ProductDTO> getAllProducts() {
