@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class ProductController {
@@ -24,15 +25,22 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public List<ProductDTO> getProducts(){
-        // TODO: 2018-11-05 Extraxt to AuthComponent
+    public List<ProductDTO> getProducts(SearchProductDto searchProductDto) {
+        // TODO: 2018-11-05 Extract to AuthComponent
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean isManager = auth.getAuthorities().contains(Role.CONTENT_MANAGER);
-        return isManager ? productService.getAllProducts() : productService.getAllProducts(auth);
+
+        List<ProductDTO> productDTOs = isManager ? productService.getAllProducts() : productService.getAllProducts(auth);
+
+        if (Objects.nonNull(searchProductDto)) {
+            productDTOs = productService.getAllProducts(productDTOs, searchProductDto);
+        }
+
+        return productDTOs;
     }
 
     @GetMapping("/products/{productId}")
-    public ProductDTO getProduct(@PathVariable Long productId){
+    public ProductDTO getProduct(@PathVariable Long productId) {
         return productService.getProductById(productId);
     }
 

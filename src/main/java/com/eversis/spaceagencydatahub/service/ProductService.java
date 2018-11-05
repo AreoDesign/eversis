@@ -1,6 +1,7 @@
 package com.eversis.spaceagencydatahub.service;
 
 import com.eversis.spaceagencydatahub.assembler.ProductAssembler;
+import com.eversis.spaceagencydatahub.controller.SearchProductDto;
 import com.eversis.spaceagencydatahub.dto.OrderDTO;
 import com.eversis.spaceagencydatahub.dto.ProductDTO;
 import com.eversis.spaceagencydatahub.entity.Mission;
@@ -10,11 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -98,5 +102,59 @@ public class ProductService {
                                     log.error(errMsg);
                                     return new EntityNotFoundException(errMsg);
                                 });
+    }
+
+    public List<ProductDTO> getAllProducts(List<ProductDTO> productDTOS, SearchProductDto searchProductDto) {
+        return productDTOS.stream()
+                          .map(filterByMissionName(searchProductDto))
+                          .filter(Objects::nonNull)
+                          .map(filterByImageType(searchProductDto))
+                          .filter(Objects::nonNull)
+                          .map(filterByFromDate(searchProductDto))
+                          .filter(Objects::nonNull)
+                          .map(filterByToDate(searchProductDto))
+                          .filter(Objects::nonNull)
+                          .collect(Collectors.toList());
+    }
+
+    private Function<ProductDTO, ProductDTO> filterByToDate(SearchProductDto searchProductDto) {
+        return product -> {
+            if (Objects.nonNull(searchProductDto.getAquisitionDateTo())
+                    && !product.getAquisitionDate().isBefore(searchProductDto.getAquisitionDateTo())) {
+                return null;
+            }
+            return product;
+        };
+    }
+
+    private Function<ProductDTO, ProductDTO> filterByFromDate(SearchProductDto searchProductDto) {
+        return product -> {
+            if (Objects.nonNull(searchProductDto.getAquisitionDateFrom())
+                    && !product.getAquisitionDate().isAfter(searchProductDto.getAquisitionDateFrom())) {
+                return null;
+            }
+            return product;
+        };
+    }
+
+    private Function<ProductDTO, ProductDTO> filterByImageType(SearchProductDto searchProductDto) {
+        return product -> {
+            if (Objects.nonNull(searchProductDto.getImageType())) {
+                if (!product.getMissionDTO().getImageType().getValue().equals(searchProductDto.getImageType().getValue())) {
+                    return null;
+                }
+            }
+            return product;
+        };
+    }
+
+    private Function<ProductDTO, ProductDTO> filterByMissionName(SearchProductDto searchProductDto) {
+        return product -> {
+            if (StringUtils.hasText(searchProductDto.getMissionName())
+                    && !product.getMissionDTO().getName().equals(searchProductDto.getMissionName())) {
+                return null;
+            }
+            return product;
+        };
     }
 }
