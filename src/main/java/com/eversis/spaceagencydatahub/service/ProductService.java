@@ -7,10 +7,12 @@ import com.eversis.spaceagencydatahub.entity.Product;
 import com.eversis.spaceagencydatahub.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Tuple;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,7 +42,7 @@ public class ProductService {
             log.error(errMsg);
             throw new EntityExistsException(errMsg);
         }
-        Mission mission = missionService.getMissionEntityByName(productDTO.getMission().getName());
+        Mission mission = missionService.getMissionEntityByName(productDTO.getMissionDTO().getName());
         Product productEntity = productAssembler.convert(productDTO);
         productEntity.setMission(mission);
         Product product = productRepository.save(productEntity);
@@ -55,6 +57,14 @@ public class ProductService {
         Product product = productRepository.save(productEntity);
 
         return productAssembler.convert(product);
+    }
+
+    public List<ProductDTO> getAllProducts(Authentication auth) {
+        //here invoke query which returns kind of join to match urls with bought products
+        List<Tuple> results = productRepository.findAllProductsForCustomerName(auth.getName());
+        // TODO: 2018-11-05 remove below line logging the info
+        results.stream().forEach(result -> result.getElements().stream().forEach(element -> log.info("content: {}", element)));
+        return null;
     }
 
     public List<ProductDTO> getAllProducts() {

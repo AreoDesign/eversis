@@ -9,12 +9,18 @@ import java.util.Objects;
 @Component
 public class ProductAssembler {
 
+    private MissionAssembler missionAssembler;
+
+    public ProductAssembler(MissionAssembler missionAssembler) {
+        this.missionAssembler = missionAssembler;
+    }
+
     public Product convert(ProductDTO productDTO){
         Product product = null;
         if (Objects.nonNull(productDTO)){
             product = new Product();
             product.setId(productDTO.getId());
-            product.setMission(productDTO.getMission());
+            product.setMission(missionAssembler.convert(productDTO.getMissionDTO()));
             product.setAquisitionDate(productDTO.getAquisitionDate());
             product.setFootprintLatitude(productDTO.getFootprintLatitude());
             product.setFootprintLongitude(productDTO.getFootprintLongitude());
@@ -34,7 +40,7 @@ public class ProductAssembler {
         if (Objects.nonNull(product)) {
             productDTO = ProductDTO.builder()
                                    .id(product.getId())
-                                   .mission(product.getMission())
+                                   .missionDTO(missionAssembler.convert(product.getMission()))
                                    .aquisitionDate(product.getAquisitionDate())
                                    .footprintLatitude(product.getFootprintLatitude())
                                    .footprintLongitude(product.getFootprintLongitude())

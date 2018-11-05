@@ -6,6 +6,7 @@ import com.eversis.spaceagencydatahub.entity.Product;
 import com.eversis.spaceagencydatahub.repository.MissionRepository;
 import com.eversis.spaceagencydatahub.repository.ProductRepository;
 import com.google.common.collect.Sets;
+import org.apache.commons.math3.util.Precision;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -30,13 +31,13 @@ public class DataPreparator {
         Mission missionTwo = createMission("Calliope", ImageType.MULTISPECTRAL);
         Mission missionThree = createMission("Odys", ImageType.PANCHROMATIC);
         missionRepository.saveAll(Sets.newHashSet(missionOne, missionTwo, missionThree));
-        Product productOne = createProduct(10, "http://space-agency-data-hub.com/images/1", missionOne);
-        Product productTwo = createProduct(20, "http://space-agency-data-hub.com/images/2", missionOne);
-        Product productThree = createProduct(25, "http://space-agency-data-hub.com/images/3", missionTwo);
-        Product productFour = createProduct(35, "http://space-agency-data-hub.com/images/4", missionTwo);
-        Product productFive = createProduct(35, "http://space-agency-data-hub.com/images/5", missionThree);
-        Product productSix = createProduct(40, "http://space-agency-data-hub.com/images/6", missionThree);
-        Product productSeven = createProduct(49, "http://space-agency-data-hub.com/images/7", missionThree);
+        Product productOne = createProduct(random.nextInt(100) + 1, "http://space-agency-data-hub.com/images/1", missionOne);
+        Product productTwo = createProduct(random.nextInt(100) + 1, "http://space-agency-data-hub.com/images/2", missionOne);
+        Product productThree = createProduct(random.nextInt(100) + 1, "http://space-agency-data-hub.com/images/3", missionTwo);
+        Product productFour = createProduct(random.nextInt(100) + 1, "http://space-agency-data-hub.com/images/4", missionTwo);
+        Product productFive = createProduct(random.nextInt(100) + 1, "http://space-agency-data-hub.com/images/5", missionThree);
+        Product productSix = createProduct(random.nextInt(100) + 1, "http://space-agency-data-hub.com/images/6", missionThree);
+        Product productSeven = createProduct(random.nextInt(100) + 1, "http://space-agency-data-hub.com/images/7", missionThree);
         productRepository.saveAll(Sets.newHashSet(productOne, productTwo, productThree, productFour, productFive,
                 productSix, productSeven));
     }
@@ -52,12 +53,11 @@ public class DataPreparator {
     private static Product createProduct(Integer price, String url, Mission mission) {
         Product product = new Product(BigDecimal.valueOf(price), url);
         product.setAquisitionDate(Instant.now());
-        product.setFootprintLatitude(random.nextDouble());
-        product.setFootprintLongitude(random.nextDouble());
-        product.setFootprintAltitude(random.nextDouble());
-        product.setFootprintFourthCoordinate(random.nextDouble());
+        product.setFootprintLatitude(Precision.round(random.nextDouble() * 100, 2));
+        product.setFootprintLongitude(Precision.round(random.nextDouble() * 100, 2));
+        product.setFootprintAltitude(Precision.round(random.nextDouble() * 100, 2));
+        product.setFootprintFourthCoordinate(Precision.round(random.nextDouble() * 100, 2));
         product.setMission(mission);
-
         return product;
     }
 }

@@ -1,6 +1,5 @@
 package com.eversis.spaceagencydatahub.dto;
 
-import com.eversis.spaceagencydatahub.entity.Mission;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +15,7 @@ import java.time.Instant;
 public class ProductDTO {//todo remove Serializable
 
     private Long id;    //TODO: consider if remove as redundant (@PathVariable)?
-    private Mission mission;
+    private MissionDTO missionDTO;
     private Instant aquisitionDate;
     private Double footprintLatitude;
     private Double footprintLongitude;
