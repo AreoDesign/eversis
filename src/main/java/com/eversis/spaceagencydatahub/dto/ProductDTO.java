@@ -12,7 +12,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDTO {//todo remove Serializable
+public class ProductDTO {
 
     private Long id;    //TODO: consider if remove as redundant (@PathVariable)?
     private MissionDTO missionDTO;

@@ -27,7 +27,7 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-            .withUser(Role.CUSTOMER.getRoleName()).password(encoder.encode(Role.CUSTOMER.getPassword())).roles(Role.CUSTOMER.getRoleName())    //TODO: move to enum type
+            .withUser(Role.CUSTOMER.getRoleName()).password(encoder.encode(Role.CUSTOMER.getPassword())).roles(Role.CUSTOMER.getRoleName())
             .and()
             .withUser(Role.CONTENT_MANAGER.getRoleName()).password(encoder.encode(Role.CONTENT_MANAGER.getPassword())).roles(Role.CONTENT_MANAGER.getRoleName());
     }
@@ -35,23 +35,23 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-            .antMatchers("/h2/**").permitAll()
-            .antMatchers(HttpMethod.GET, "/missions/*").permitAll()
-            .antMatchers(HttpMethod.GET, "/missions").permitAll()
-            .antMatchers(HttpMethod.GET, "/products").permitAll()
-            .antMatchers(HttpMethod.GET, "/products/*").permitAll()
-            .regexMatchers(HttpMethod.POST, "/missions").hasRole(Role.CONTENT_MANAGER.getRoleName())
-            .regexMatchers(HttpMethod.PUT, "/missions").hasRole(Role.CONTENT_MANAGER.getRoleName())
-            .regexMatchers(HttpMethod.DELETE, "/missions/*").hasRole(Role.CONTENT_MANAGER.getRoleName())
-            .regexMatchers(HttpMethod.POST, "/products").hasRole(Role.CONTENT_MANAGER.getRoleName())
-            .regexMatchers(HttpMethod.DELETE, "/products/*").hasRole(Role.CONTENT_MANAGER.getRoleName())
-            .regexMatchers(HttpMethod.POST, "/orders").hasRole(Role.CUSTOMER.getRoleName())
-            .and()
-            .httpBasic()
-            .authenticationEntryPoint(getMyBasicAuthenticationEntryPoint())
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                    .antMatchers("/h2/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/missions/*").permitAll()
+                    .antMatchers(HttpMethod.GET, "/missions").permitAll()
+                    .antMatchers(HttpMethod.GET, "/products").permitAll()
+                    .antMatchers(HttpMethod.GET, "/products/*").permitAll()
+                    .regexMatchers(HttpMethod.POST, "/missions").hasRole(Role.CONTENT_MANAGER.getRoleName())
+                    .regexMatchers(HttpMethod.PUT, "/missions").hasRole(Role.CONTENT_MANAGER.getRoleName())
+                    .regexMatchers(HttpMethod.DELETE, "/missions/*").hasRole(Role.CONTENT_MANAGER.getRoleName())
+                    .regexMatchers(HttpMethod.POST, "/products").hasRole(Role.CONTENT_MANAGER.getRoleName())
+                    .regexMatchers(HttpMethod.DELETE, "/products/*").hasRole(Role.CONTENT_MANAGER.getRoleName())
+                    .regexMatchers(HttpMethod.POST, "/orders").hasRole(Role.CUSTOMER.getRoleName())
+                    .and()
+                    .httpBasic()
+                    .authenticationEntryPoint(getMyBasicAuthenticationEntryPoint())
+                    .and()
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.csrf().disable();
         httpSecurity.headers().frameOptions().disable();
     }
