@@ -32,10 +32,10 @@ Then you will be exposed for all available RESTcontroller methods:
 
 In order to authenticate for particular role and allow respective functionality there were 2 roles predefined:
 - For Customer:
-    - username: customer,
+    - username: customer
     - password: customer
 - For Content Manager:
-    - username: manager,
+    - username: manager
     - password: manager
 
 For ease of testing and simulation of a real database 3 missions and 7 products where predefined.
