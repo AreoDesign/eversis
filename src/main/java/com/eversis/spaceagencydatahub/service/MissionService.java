@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +42,6 @@ public class MissionService {
         Mission missionEntity = getMissionEntityByName(missionName);
         //record deactivation instead of remove
         missionEntity.setActive(false);
-        missionEntity.setDeactivationDate(Instant.now());
         missionRepository.save(missionEntity);
         return missionAssembler.convert(missionEntity);
     }

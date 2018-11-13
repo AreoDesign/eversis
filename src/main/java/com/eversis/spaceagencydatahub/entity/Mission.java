@@ -2,12 +2,14 @@ package com.eversis.spaceagencydatahub.entity;
 
 import com.eversis.spaceagencydatahub.converter.ImageTypeConverter;
 import com.eversis.spaceagencydatahub.dictionary.ImageType;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -20,14 +22,14 @@ import java.time.Instant;
 @Entity
 @Table(name = "mission")
 @Data
-@Builder(builderMethodName = "hiddenBuilder")
+@Builder(builderMethodName = "backstageBuilder")
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Mission implements Serializable {
 
     @Id
-    @NotNull
+    @NotNull(message = "Mission name cannot be null.")
     @NonNull
     private String name;
 
@@ -38,16 +40,28 @@ public class Mission implements Serializable {
 
     private Instant endDate;
 
-    //when mission is removed isActive flag is set to false (not physically removed from DB)
+    /**
+     * when mission is removed isActive flag is set to false (not physically removed from DB)
+     */
     @Builder.Default
     private boolean isActive = true;
 
-    //when mission is removed isActive flag is set to false and deactivation time is set. Null == still active.
+    /**
+     * when mission is removed isActive flag is set to false and deactivation time is set.
+     * Null == still active.
+     */
+    @Setter(AccessLevel.NONE)
     @Builder.Default
     private Instant deactivationDate = null;
 
     public static MissionBuilder builder(@NotNull String name) {
-        return hiddenBuilder().name(name);
+        return backstageBuilder().name(name);
+    }
+
+    //binding field isActive with deactivationDate
+    public void setActive(boolean active) {
+        isActive = active;
+        deactivationDate = active ? null : Instant.now();
     }
 
 }

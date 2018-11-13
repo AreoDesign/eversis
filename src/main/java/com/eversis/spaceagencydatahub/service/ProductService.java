@@ -15,7 +15,6 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -60,7 +59,6 @@ public class ProductService {
     public ProductDTO remove(Long productId) {
         Product productEntity = validateInputAndGetProductById(productId);
         productEntity.setActive(false);
-        productEntity.setDeactivationDate(Instant.now());
         Product product = productRepository.save(productEntity);
 
         return productAssembler.convert(product);

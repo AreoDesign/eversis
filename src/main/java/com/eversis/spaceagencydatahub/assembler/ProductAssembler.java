@@ -15,27 +15,27 @@ public class ProductAssembler {
         this.missionAssembler = missionAssembler;
     }
 
-    public Product convert(ProductDTO productDTO){
+    public Product convert(ProductDTO productDTO) {
         Product product = null;
-        if (Objects.nonNull(productDTO)){
-            product = new Product();
-            product.setId(productDTO.getId());
-            product.setMission(missionAssembler.convert(productDTO.getMissionDTO()));
-            product.setAquisitionDate(productDTO.getAquisitionDate());
-            product.setFootprintLatitude(productDTO.getFootprintLatitude());
-            product.setFootprintLongitude(productDTO.getFootprintLongitude());
-            product.setFootprintAltitude(productDTO.getFootprintAltitude());
-            product.setFootprintFourthCoordinate(productDTO.getFootprintTime());
-            product.setPrice(productDTO.getPrice());
-            product.setUrl(productDTO.getUrl());
-            product.setActive(productDTO.isActive());
-            product.setDeactivationDate(productDTO.getDeactivationDate());
+        if (Objects.nonNull(productDTO)) {
+            product = Product.builder()
+                             .id(productDTO.getId())
+                             .mission(missionAssembler.convert(productDTO.getMissionDTO()))
+                             .aquisitionDate(productDTO.getAquisitionDate())
+                             .footprintLatitude(productDTO.getFootprintLatitude())
+                             .footprintLongitude(productDTO.getFootprintLongitude())
+                             .footprintAltitude(productDTO.getFootprintAltitude())
+                             .footprintFourthCoordinate(productDTO.getFootprintTime())
+                             .price(productDTO.getPrice())
+                             .url(productDTO.getUrl())
+                             .isActive(productDTO.isActive())
+                             .build();
         }
 
         return product;
     }
 
-    public ProductDTO convert(Product product){
+    public ProductDTO convert(Product product) {
         ProductDTO productDTO = null;
         if (Objects.nonNull(product)) {
             productDTO = ProductDTO.builder()
