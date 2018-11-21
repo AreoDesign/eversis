@@ -64,10 +64,11 @@ public class ProductService {
         return productAssembler.convert(product);
     }
 
+    // FIXME: 2018-11-20 THIS WILL NOT WORK!!! NEED TO USE ORDER DETAILS FOR PRODUCTS!!!
     public List<ProductDTO> getAllProducts(Authentication auth) {
-        List<Long> orderedProducts = orderService.findOrdersForUser(auth.getName())
+        List<Long> orderedProducts = orderService.findCustomerOrders(auth.getName())
                                                  .stream()
-                                                 .map(OrderDTO::getProductId)
+                                                 .map(OrderDTO::getId)
                                                  .collect(Collectors.toList());
 
         return productRepository.findAll()

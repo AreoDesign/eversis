@@ -6,15 +6,22 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+// TODO: 2018-11-20 clean entity builders
 @Component
 public class OrderAssembler {
+
+    private CustomerAssembler customerAssembler;
+
+    public OrderAssembler(CustomerAssembler customerAssembler) {
+        this.customerAssembler = customerAssembler;
+    }
+
     public Order convert(OrderDTO orderDTO) {
         Order order = null;
         if (Objects.nonNull(orderDTO)) {
             order = Order.builder()
                          .id(orderDTO.getId())
-                         .productId(orderDTO.getProductId())
-                         .userName(orderDTO.getUserName())
+                         .customer(customerAssembler.convert(orderDTO.getCustomerDTO()))
                          .build();
         }
 
@@ -26,8 +33,7 @@ public class OrderAssembler {
         if (Objects.nonNull(orderEntity)) {
             orderDTO = OrderDTO.builder()
                                .id(orderEntity.getId())
-                               .productId(orderEntity.getProductId())
-                               .userName(orderEntity.getUserName())
+                               .customerDTO(customerAssembler.convert(orderEntity.getCustomer()))
                                .build();
         }
 

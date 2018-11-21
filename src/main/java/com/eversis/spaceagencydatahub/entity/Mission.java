@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Convert;
@@ -24,20 +22,17 @@ import java.time.Instant;
 @Data
 @Builder(builderMethodName = "backstageBuilder")
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class Mission implements Serializable {
 
     @Id
-    @NotNull(message = "Mission name cannot be null.")
-    @NonNull
+    @NotNull(message = "Mission must have a valid, unique name.")
     private String name;
 
     @Convert(converter = ImageTypeConverter.class)
     private ImageType imageType;
 
     private Instant startDate;
-
     private Instant endDate;
 
     /**
@@ -54,6 +49,7 @@ public class Mission implements Serializable {
     @Builder.Default
     private Instant deactivationDate = null;
 
+    //hidden builder for @Builder annotation
     public static MissionBuilder builder(@NotNull String name) {
         return backstageBuilder().name(name);
     }

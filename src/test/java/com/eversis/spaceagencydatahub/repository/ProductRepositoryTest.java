@@ -69,7 +69,7 @@ public class ProductRepositoryTest {
         missionProducts.stream().forEach(r -> {
             assertEquals(product.getId(), r.getId());
             assertEquals(mission, r.getMission());
-            assertEquals(product.getAquisitionDate(), r.getAquisitionDate());
+            assertEquals(product.getAcquisitionDate(), r.getAcquisitionDate());
             assertEquals(product.getFootprintLatitude(), r.getFootprintLatitude());
             assertEquals(product.getFootprintLongitude(), r.getFootprintLongitude());
             assertEquals(product.getFootprintAltitude(), r.getFootprintAltitude());

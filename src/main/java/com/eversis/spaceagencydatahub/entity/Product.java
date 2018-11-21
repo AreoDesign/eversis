@@ -39,13 +39,13 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)//todo: switch back to lazy
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_name", nullable = false)
     private Mission mission;
 
     @NotNull
     @Builder.Default
-    private Instant aquisitionDate = Instant.now();
+    private Instant acquisitionDate = Instant.now();
 
     //acc. to 1st normal form principle - all data shall be atomic
     private Double footprintLatitude;
@@ -54,14 +54,14 @@ public class Product implements Serializable {
     private Double footprintFourthCoordinate;
 
     @NonNull
-    @NotNull(message = "Product price cannot be null.")
+    @NotNull(message = "Product must have a specified price.")
     @Min(value = 0, message = "Price cannot be negative value.")
     @Max(value = 200, message = "Maximum price for the product is 200.")
     @Column(precision = 5, scale = 2)
     private BigDecimal price;
 
     @NonNull
-    @NotNull(message = "URL address of a product cannot be null")
+    @NotNull(message = "Product must have URL address specified.")
     @URL(message = "Given URL is not valid.")
     private String url;
 

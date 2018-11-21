@@ -1,5 +1,7 @@
 package com.eversis.spaceagencydatahub.dto;
 
+
+import com.eversis.spaceagencydatahub.dictionary.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,9 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDTO {
+public class CustomerDTO {
 
-    private Long id;
-    private CustomerDTO customerDTO;
-
+    private String login;
+    private String password;
+    private Role role;
 }

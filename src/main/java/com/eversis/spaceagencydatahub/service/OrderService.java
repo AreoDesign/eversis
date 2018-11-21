@@ -33,8 +33,8 @@ public class OrderService {
                        .collect(Collectors.toList());
     }
 
-    public List<OrderDTO> findOrdersForUser(String username) {
-        return orderRepository.findByUserName(username)
+    public List<OrderDTO> findCustomerOrders(String login) {
+        return orderRepository.findByLogin(login)
                               .stream()
                               .map(orderAssembler::convert)
                               .filter(Objects::nonNull)

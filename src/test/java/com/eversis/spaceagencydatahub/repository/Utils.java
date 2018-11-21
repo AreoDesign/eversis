@@ -48,7 +48,7 @@ public class Utils {
     static Product createProductForMission(Mission mission, Set<Product> products, ProductRepository productRepository) {
         //set up products
         Product product = new Product(BigDecimal.valueOf(random.nextInt(200)).setScale(2), "http://space-agency-data-hub.com/images/" + random.nextInt(1000));
-        product.setAquisitionDate(Instant.now());
+        product.setAcquisitionDate(Instant.now());
         product.setFootprintLatitude(Precision.round(random.nextDouble() * 100, 2));
         product.setFootprintLongitude(Precision.round(random.nextDouble() * 100, 2));
         product.setFootprintAltitude(Precision.round(random.nextDouble() * 100, 2));

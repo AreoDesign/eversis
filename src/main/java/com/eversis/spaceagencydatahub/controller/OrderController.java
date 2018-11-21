@@ -1,8 +1,9 @@
 package com.eversis.spaceagencydatahub.controller;
 
-import com.eversis.spaceagencydatahub.assembler.OrderAssembler;
 import com.eversis.spaceagencydatahub.dictionary.Role;
+import com.eversis.spaceagencydatahub.dto.CustomerDTO;
 import com.eversis.spaceagencydatahub.dto.OrderDTO;
+import com.eversis.spaceagencydatahub.service.CustomerService;
 import com.eversis.spaceagencydatahub.service.OrderService;
 import org.apache.commons.lang3.Validate;
 import org.springframework.security.core.Authentication;
@@ -18,19 +19,20 @@ import java.util.List;
 public class OrderController {
 
     private OrderService orderService;
-    private OrderAssembler orderAssembler;
+    private CustomerService customerService;
 
-    public OrderController(OrderService orderService, OrderAssembler orderAssembler) {
+    public OrderController(OrderService orderService, CustomerService customerService) {
         this.orderService = orderService;
-        this.orderAssembler = orderAssembler;
+        this.customerService = customerService;
     }
 
     @PostMapping("/orders")
     public OrderDTO addOrder(@RequestBody OrderDTO orderDTO){
         Validate.notNull(orderDTO);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        orderDTO.setUserName(auth.getName());
+        CustomerDTO customerDTO = customerService.getCustomerDTO(auth.getName());
         orderDTO.setId(null);
+        orderDTO.setCustomerDTO(customerDTO);
         return orderService.add(orderDTO);
     }
 
@@ -38,7 +40,7 @@ public class OrderController {
     public List<OrderDTO> getOrders(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean isManager = auth.getAuthorities().contains(Role.CONTENT_MANAGER);
-        return isManager ? orderService.findAllOrders() : orderService.findOrdersForUser(auth.getName());
+        return isManager ? orderService.findAllOrders() : orderService.findCustomerOrders(auth.getName());
     }
 
 }

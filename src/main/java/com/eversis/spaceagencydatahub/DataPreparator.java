@@ -52,7 +52,7 @@ public class DataPreparator {
 
     private static Product createProduct(Integer price, String url, Mission mission) {
         Product product = new Product(BigDecimal.valueOf(price), url);
-        product.setAquisitionDate(Instant.now());
+        product.setAcquisitionDate(Instant.now());
         product.setFootprintLatitude(Precision.round(random.nextDouble() * 100, 2));
         product.setFootprintLongitude(Precision.round(random.nextDouble() * 100, 2));
         product.setFootprintAltitude(Precision.round(random.nextDouble() * 100, 2));
