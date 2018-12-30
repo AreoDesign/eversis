@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class MissionController {
@@ -22,7 +23,7 @@ public class MissionController {
     }
 
     @GetMapping("/missions")
-    public List<MissionDTO> getMissions(){
+    public Set<MissionDTO> getMissions(){
         return missionService.getAllMissions();
     }
 

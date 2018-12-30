@@ -1,4 +1,4 @@
-package com.eversis.spaceagencydatahub.controller;
+package com.eversis.spaceagencydatahub.dto;
 
 import com.eversis.spaceagencydatahub.dictionary.ImageType;
 import lombok.AllArgsConstructor;

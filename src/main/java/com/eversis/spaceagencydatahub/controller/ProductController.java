@@ -2,6 +2,7 @@ package com.eversis.spaceagencydatahub.controller;
 
 import com.eversis.spaceagencydatahub.dictionary.Role;
 import com.eversis.spaceagencydatahub.dto.ProductDTO;
+import com.eversis.spaceagencydatahub.dto.SearchProductDto;
 import com.eversis.spaceagencydatahub.service.ProductService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +26,7 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public List<ProductDTO> getProducts(SearchProductDto searchProductDto) {
+    public List<ProductDTO> getProducts(@RequestBody SearchProductDto searchProductDto) {
         // TODO: 2018-11-05 Extract to AuthComponent
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean isManager = auth.getAuthorities().contains(Role.CONTENT_MANAGER);

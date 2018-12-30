@@ -26,9 +26,10 @@ public class Customer implements Serializable {
     @NotNull(message = "Customer must have a unique login.")
     private String login;
 
+    // TODO: 2018-11-24 add encryption to password!
     @NotNull(message = "Customer must have a password to log in.")
     @NonNull
-    @Size(min = 5, max = 25, message = "Password must be within 5 and 25 signs.") // TODO: 2018-11-20 add encryption!
+    @Size(min = 5, max = 25, message = "Password must be within 5 and 25 signs.") // TODO: 2018-11-20 register encryption!
     private String password;
 
     @NotNull(message = "Customer must have a role assigned.")

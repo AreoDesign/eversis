@@ -1,7 +1,8 @@
 package com.eversis.spaceagencydatahub.service;
 
 import com.eversis.spaceagencydatahub.assembler.ProductAssembler;
-import com.eversis.spaceagencydatahub.controller.SearchProductDto;
+import com.eversis.spaceagencydatahub.dto.MissionDTO;
+import com.eversis.spaceagencydatahub.dto.SearchProductDto;
 import com.eversis.spaceagencydatahub.dto.OrderDTO;
 import com.eversis.spaceagencydatahub.dto.ProductDTO;
 import com.eversis.spaceagencydatahub.entity.Mission;
@@ -51,17 +52,17 @@ public class ProductService {
         Mission mission = missionService.getMissionEntityByName(productDTO.getMissionDTO().getName());
         Product productEntity = productAssembler.convert(productDTO);
         productEntity.setMission(mission);
-        Product product = productRepository.save(productEntity);
+        productEntity = productRepository.save(productEntity);
 
-        return productAssembler.convert(product);
+        return productAssembler.convert(productEntity);
     }
 
     public ProductDTO remove(Long productId) {
         Product productEntity = validateInputAndGetProductById(productId);
         productEntity.setActive(false);
-        Product product = productRepository.save(productEntity);
+        productEntity = productRepository.save(productEntity);
 
-        return productAssembler.convert(product);
+        return productAssembler.convert(productEntity);
     }
 
     // FIXME: 2018-11-20 THIS WILL NOT WORK!!! NEED TO USE ORDER DETAILS FOR PRODUCTS!!!

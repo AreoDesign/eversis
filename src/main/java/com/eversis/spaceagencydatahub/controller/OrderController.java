@@ -30,7 +30,7 @@ public class OrderController {
     public OrderDTO addOrder(@RequestBody OrderDTO orderDTO){
         Validate.notNull(orderDTO);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        CustomerDTO customerDTO = customerService.getCustomerDTO(auth.getName());
+        CustomerDTO customerDTO = customerService.getCustomer(auth.getName());
         orderDTO.setId(null);
         orderDTO.setCustomerDTO(customerDTO);
         return orderService.add(orderDTO);

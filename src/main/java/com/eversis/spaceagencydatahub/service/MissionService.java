@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -32,9 +33,9 @@ public class MissionService {
         Validate.notNull(missionDTO, "New mission cannot be null!");
         throwExceptionWhenMissionExists(missionDTO);
         Mission missionEntity = missionAssembler.convert(missionDTO);
-        Mission mission = missionRepository.save(missionEntity);
+        missionEntity = missionRepository.save(missionEntity);
 
-        return missionAssembler.convert(mission);
+        return missionAssembler.convert(missionEntity);
     }
 
     public MissionDTO remove(String missionName) {
@@ -54,9 +55,9 @@ public class MissionService {
         return missionAssembler.convert(missionEntity);
     }
 
-    public List<MissionDTO> getAllMissions() {
+    public Set<MissionDTO> getAllMissions() {
         List<Mission> missions = missionRepository.findAll();
-        return missions.stream().map(mission -> missionAssembler.convert(mission)).collect(Collectors.toList());
+        return missions.stream().map(missionAssembler::convert).collect(Collectors.toSet());
     }
 
     public MissionDTO getMissionByName(String name) {
@@ -73,14 +74,11 @@ public class MissionService {
                                 });
     }
 
-    //***************************************************************
-    //******************* PRIVATE METHODS SECTION *******************
-    //***************************************************************
     private void throwExceptionWhenMissionExists(MissionDTO missionDTO) {
         boolean missionExistOnDb = missionRepository.findById(missionDTO.getName()).isPresent();
 
         if (missionExistOnDb) {
-            String errMsg = String.format("Mission name '%s', exists already.", missionDTO.getName());
+            String errMsg = String.format("Mission name '%s', already exists.", missionDTO.getName());
             log.error(errMsg);
             throw new EntityExistsException(errMsg);
         }
